@@ -27,6 +27,13 @@ contract Voting {
     // Evento para registrar o registro de um novo candidato
     event CandidateRegistered(uint256 indexed candidateId, string name);
 
+    // Evento para registrar o log de auditoria
+    event AuditLog(uint256 indexed actionId, string action);
+
+    // Variável para armazenar o registro de auditoria
+    mapping(uint256 => string) public auditLog;
+    uint256 public auditLogCount;
+
     // Modificador para verificar se o endereço do remetente é o administrador
     modifier onlyAdmin() {
         require(msg.sender == admin, "Only admin can perform this action");
@@ -71,10 +78,13 @@ contract Voting {
         return candidates[winningCandidateId].name;
     }
 
+
     // Função para permitir a auditabilidade do contrato
-    function getAuditLog(uint256 _actionId) public view returns (string memory) {
-        // Aqui você pode implementar o registro de todas as ações realizadas no contrato
-        // Por exemplo, registro de registro de candidatos, votos etc.
-        // Retorne o log de auditoria com base no ID da ação
-    }
+    // Ou seja, função para retornar o log de auditoria com base no ID da ação
+function getAuditLog(uint256 _actionId) public view returns (string memory) {
+    require(_actionId > 0 && _actionId <= auditLogCount, "Invalid action ID");
+    return auditLog[_actionId];
 }
+
+}
+
